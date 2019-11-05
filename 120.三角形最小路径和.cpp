@@ -37,7 +37,41 @@
 class Solution {
 public:
     int minimumTotal(vector<vector<int>>& triangle) {
-        
+        if(triangle.size() == 0) return 0;
+        int *dp = new int[triangle.size()];
+        dp[0] = triangle[0][0];
+        int x = 1;
+        while(x < triangle.size()){
+            int y = 0;
+            int dpf = 0;
+            while(y <= x){
+                if(y == 0){
+                    dpf = dp[0];
+                    dp[0] = dp[0] + triangle[x][y];
+                } 
+                else if(y == x){
+                    dp[y] = dpf + triangle[x][y];
+                } 
+                else{
+                    int k = dp[y];
+                    dp[y] = min(dpf + triangle[x][y], 
+                                    dp[y] + triangle[x][y]);
+                    dpf = k;
+                }
+                y++;
+            }
+            /*for(int i=0; i<=x; i++){
+                cout << dp[i] << " ";
+            }cout << endl;*/
+            x++;
+        }
+
+        int res = dp[0];
+        for(int i=1; i<triangle.size(); i++){
+            if(dp[i] < res) res = dp[i];
+        }
+
+        return res;
     }
 };
 // @lc code=end
