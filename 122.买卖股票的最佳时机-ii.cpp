@@ -49,7 +49,27 @@
 class Solution {
 public:
     int maxProfit(vector<int>& prices) {
-        
+        int fir, sec, res, in;
+        fir = 0;
+        sec = 1;
+        res = 0;
+        in = -1;
+        while(sec < prices.size()){
+            if(prices[fir] >= prices[sec] && in == -1){
+                
+            }else if(prices[fir] >= prices[sec] && in != -1){
+                res = res + (prices[fir] - prices[in]);
+                in = sec;
+            }else if(prices[fir] < prices[sec] && in == -1){
+                in = fir;
+            }
+            fir++;
+            sec++;
+        }
+        if(in == -1) return 0;
+        res = res + (prices[fir] - prices[in]);
+
+        return res;
     }
 };
 // @lc code=end
