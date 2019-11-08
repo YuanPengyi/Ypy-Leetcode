@@ -55,9 +55,7 @@ public:
         res = 0;
         in = -1;
         while(sec < prices.size()){
-            if(prices[fir] >= prices[sec] && in == -1){
-                
-            }else if(prices[fir] >= prices[sec] && in != -1){
+            if(prices[fir] >= prices[sec] && in != -1){
                 res = res + (prices[fir] - prices[in]);
                 in = sec;
             }else if(prices[fir] < prices[sec] && in == -1){
