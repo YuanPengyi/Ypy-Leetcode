@@ -54,8 +54,23 @@
  */
 class Solution {
 public:
+    int res = INT_MIN;
     int maxPathSum(TreeNode* root) {
-        
+        int m = iterate(root);
+        return res;
+    }
+
+    int iterate(TreeNode* root){
+        if(root == NULL) return 0;
+        int left = max(iterate(root->left), 0);
+        int right = max(iterate(root->right), 0);
+
+        // 以当前节点为 root
+        int new_start = root->val + left + right;
+        if(new_start > res) res = new_start;
+
+        // 不以当前节点为 root
+        return root->val + max(left, right);
     }
 };
 // @lc code=end
