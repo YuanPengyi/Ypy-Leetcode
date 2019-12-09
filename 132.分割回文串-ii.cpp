@@ -29,50 +29,43 @@
 // @lc code=start
 class Solution {
 public:
-    int cut = INT_MAX;
-    int cnt = 0;
     int minCut(string s) {
-        if(s.length() == 0) return 0;
-        int start = 0;;
-        int part = 0;
-        int end = s.length()-1;
-        while(part <= end){
-            iterate(s, start, part, end);
-            part++;
+        int size = s.length();
+        vector<int> min_cut(size, INT_MAX);
+        vector<vector<bool>> dp(size, vector<bool>(size, false));
+        for(int i=0; i<size; i++)
+            for(int j=0; j<size; j++)
+                dp[i][j] = false;
+        for(int i=0; i<size; i++){
+            dp[i][i] = true;
+            min_cut[i] = i;
         }
 
-        return cut;
-    }
-
-    void iterate(string s, int start, int part, int end){
-        if(start == end){
-            if(cnt < cut) cut = cnt;
-            return;
-        }
-        int first = start;
-        int last = part;
-        while(last > first){
-            if(s[first] != s[last]) return;
-            first++;
-            last--;
-        }
-        // cout << start << " " << part << " " << end << endl;
-        cnt++;
-        if(cnt > cut){
-            cnt--;
-            return;
+        for(int i=size-1; i>=0; i--){
+            for(int j=size-1; j>i; j--){
+                if(s[i] == s[j] && j-i>2){
+                    dp[i][j] = dp[i+1][j-1];
+                }else if(s[i] == s[j]){
+                    dp[i][j] = true;
+                }else{
+                    continue;
+                }
+            }
         }
 
-        first = part+1;
-        if(first > end){
-            if(cnt-1 < cut) cut = cnt-1;
-        }
-        while(first <= end){
-            iterate(s, part+1, first, end);
-            first++;
+        for(int i=0; i<size; i++){
+            for(int j=i; j<size; j++){
+                if(dp[i][j] == false){
+                    min_cut[j] = min(min_cut[j], min_cut[j-1]+1);
+                }else if(i == 0 && dp[i][j] == true){
+                    min_cut[j] = 0;
+                }else{
+                    min_cut[j] = min(min_cut[j], min_cut[i-1]+1);
+                }
+            }
         }
 
-        cnt--;
+        return min_cut[size-1];
     }
 };
 // @lc code=end
