@@ -36,14 +36,14 @@
 class Solution {
 public:
     int singleNumber(vector<int>& nums) {
-        sort(nums, 0, nums.size());
-        for(int i=1; i<nums.size(); i++){
-            if(nums[i] != nums[i-1]){
-                return nums[i-1];
-            }
-
-            i++;
+        int size =  nums.size();
+        int res = nums[0];
+        for(int i=1; i<size; i++){
+            // cout << res << endl;
+            res = nums[i] ^ res;
         }
+
+        return res;
     }
 };
 // @lc code=end
