@@ -21,7 +21,7 @@
  * 
  * 
  * 
- * 插入排序算法：
+ * 插入排序算法 ：
  * 
  * 
  * 插入排序是迭代的，每次只移动一个元素，直到所有元素可以形成一个有序的输出列表。
@@ -69,7 +69,7 @@ public:
             bool flag = true;
             while(tmp != cur){
                 // cout << tmp->val << " " << cur->val << endl;
-                if(tmp->val > cur->val){
+                if(tmp->val > cur->val){ 
                     // cout << "--" << endl;
                     pre->next = cur->next;
                     cur->next = tmp;
