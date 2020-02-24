@@ -33,64 +33,78 @@
 class Solution {
 public:
     string largestNumber(vector<int>& nums) {
-        int* cnts = new int[nums.size()];
-        int* numss = new int[nums.size()];
-        int maxcnt = 0;
-        for(int i=0; i<nums.size(); i++){
-            numss[i] = nums[i];
-            int cnt = 1;
-            int tmp = nums[i];
-            while(1){
-                tmp = tmp / 10;
-                if(tmp == 0){
-                    break;
-                }
-                cnt++;
-            }
-            if(cnt > maxcnt) maxcnt = cnt;
-            if(nums[i] == 0) cnt = 0;
-            cnts[i] = cnt;
+        vector<string> record;
+        int size = nums.size();
+        for(int i=0; i<size; i++){
+            record.push_back(to_string(nums[i]));
         }
-
-        for(int i=0; i<nums.size(); i++){
-            int tmp = nums[i];
-            int add = tmp/pow(10, cnts[i]-1);
-            for(int j=cnts[i]; j<maxcnt; j++){
-                tmp = tmp*10 + add;
-            }
-            // cout << tmp << "|";
-            cnts[i] = tmp;
-        }
-
-        for(int i=0; i<nums.size(); i++){
-            for(int j=i+1; j<nums.size(); j++){
-                if(cnts[i] > cnts[j] || (cnts[i] == cnts[j] && numss[i] < numss[j])){
-                    int tmp = numss[i];
-                    int tmp0 = cnts[i];
-                    numss[i] = numss[j];
-                    cnts[i] = cnts[j];
-                    numss[j] = tmp;
-                    cnts[j] = tmp0;
+        /*
+        for(int i=0; i<size; i++){
+            for(int j=i+1; j<size; j++){
+                if(!compare(record[i], record[j])){
+                    string tmp = record[i];
+                    record[i] = record[j];
+                    record[j] = tmp;
                 }
             }
-        }
+        }*/
+
+        QSort(record, 0, size-1);
+
+        if(record[0] == "0") return "0";
 
         string res = "";
-        for(int i=nums.size()-1; i>=0; i--){
-            if(numss[i] == 830){
-                numss[i] = 8308;
-                res += to_string(numss[i]);
-                continue;
-            }
-            if(numss[i] == 8308){
-                numss[i] = 830;
-            }
-            res += to_string(numss[i]);
+        for(int i=0; i<size; i++){
+            res += record[i];
         }
 
-        if(res[0] == '0') return "0";
-
         return res;
+    }
+
+    void QSort(vector<string> &rec, int low, int high){
+        if(low < high){
+            int index = getIndex(rec, low, high);
+            // cout << low << "|" << high << "|" << rec[low] << "|" << rec[high] << endl;
+
+            QSort(rec, low, index-1);
+            QSort(rec, index+1, high);
+        }
+    }
+
+    int getIndex(vector<string> &rec, int low, int high){
+        string pivot = rec[low];
+        while(low < high){
+            if(compare(pivot, rec[high])){
+                high--;
+                continue;
+            }else{
+                rec[low] = rec[high];
+                low++;
+            }
+            while(low < high){
+                if(!compare(pivot, rec[low])){
+                    low++;
+                }else{
+                    rec[high] = rec[low];
+                    high--;
+                    break;
+                }
+            }
+        }
+        rec[low] = pivot;
+        // cout << rec[0] << "|" << rec[1] << endl;
+
+        return low;
+    }
+
+    bool compare(string a, string b){
+        string mix1 = a + b;
+        string mix2 = b + a;
+        if(mix1 >= mix2){
+            return true;
+        }else{
+            return false;
+        }
     }
 };
 // @lc code=end
